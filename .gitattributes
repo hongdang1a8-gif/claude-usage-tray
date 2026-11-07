@@ -1,0 +1,6 @@
+* text=auto
+# File chạy trên Windows: luôn giữ CRLF, kể cả khi build zip trên runner Linux
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.vbs text eol=crlf
+*.png binary
