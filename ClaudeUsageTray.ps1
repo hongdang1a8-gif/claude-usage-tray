@@ -15,6 +15,8 @@ Add-Type -Namespace Win32 -Name Native -MemberDefinition '[DllImport("user32.dll
 $ConfigDir  = if ($env:CLAUDE_CONFIG_DIR) { $env:CLAUDE_CONFIG_DIR } else { Join-Path $env:USERPROFILE '.claude' }
 $CredPath   = Join-Path $ConfigDir '.credentials.json'
 $UsageUrl   = 'https://api.anthropic.com/api/oauth/usage'
+$ScriptDir  = $PSScriptRoot
+$StartupLnk = Join-Path ([Environment]::GetFolderPath('Startup')) 'ClaudeUsageTray.lnk'
 $RefreshMin = 3          # phút giữa 2 lần cập nhật
 $WarnAt     = 80         # % thì bật thông báo cảnh báo (1 lần / chu kỳ)
 $vi         = [Globalization.CultureInfo]::GetCultureInfo('vi-VN')
@@ -96,6 +98,23 @@ function Show-Error([string]$short, [string]$long) {
     $miDetailWk.Text = ''
 }
 
+# ---------- Khởi động cùng Windows (shortcut trong thư mục Startup của user) ----------
+function Test-Autostart { Test-Path $StartupLnk }
+
+function Set-Autostart([bool]$on) {
+    if ($on) {
+        $sh = New-Object -ComObject WScript.Shell
+        $sc = $sh.CreateShortcut($StartupLnk)
+        $sc.TargetPath       = Join-Path $env:WINDIR 'System32\wscript.exe'
+        $sc.Arguments        = '"' + (Join-Path $ScriptDir 'start.vbs') + '"'
+        $sc.WorkingDirectory = $ScriptDir
+        $sc.Description      = 'Claude Usage Tray'
+        $sc.Save()
+    } else {
+        Remove-Item $StartupLnk -Force -ErrorAction SilentlyContinue
+    }
+}
+
 # ---------- Lấy dữ liệu ----------
 function Update-Usage {
     try {
@@ -157,6 +176,14 @@ $miRefresh = $menu.Items.Add('Làm mới ngay')
 $miRefresh.add_Click({ Update-Usage })
 $miWeb = $menu.Items.Add('Mở trang Usage trên claude.ai')
 $miWeb.add_Click({ Start-Process 'https://claude.ai/settings/usage' })
+$miAuto = New-Object Windows.Forms.ToolStripMenuItem 'Khởi động cùng Windows'
+$miAuto.add_Click({
+    try { Set-Autostart (-not (Test-Autostart)) }
+    catch { $tray.ShowBalloonTip(5000, 'Claude usage', 'Không đổi được cài đặt khởi động: ' + $_.Exception.Message, [Windows.Forms.ToolTipIcon]::Error) }
+    $miAuto.Checked = Test-Autostart
+})
+[void]$menu.Items.Add($miAuto)
+$menu.add_Opening({ $miAuto.Checked = Test-Autostart })
 [void]$menu.Items.Add('-')
 $miExit = $menu.Items.Add('Thoát')
 $miExit.add_Click({

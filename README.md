@@ -15,7 +15,8 @@ Icon nhỏ trên taskbar Windows cho biết bạn đã dùng bao nhiêu % hạn 
 2. Double-click **`install.cmd`**.
 
 Widget được cài vào `%LOCALAPPDATA%\ClaudeUsageTray`, tự chạy mỗi khi đăng nhập Windows, không cần quyền Admin.
-Không muốn tự chạy cùng Windows: mở cmd tại thư mục đó và chạy `install.cmd -NoAutostart`.
+Bật/tắt tự chạy cùng Windows bất cứ lúc nào: click phải icon → **Khởi động cùng Windows** (có dấu tick là đang bật).
+Muốn cài mà không bật tự chạy: mở cmd tại thư mục đó và chạy `install.cmd -NoAutostart`.
 
 Nếu không thấy icon: bấm mũi tên **^** ở góc phải taskbar rồi kéo icon ra ngoài, hoặc vào
 *Settings → Personalization → Taskbar → Other system tray icons* và bật **Windows PowerShell**.
@@ -27,7 +28,7 @@ Nếu không thấy icon: bấm mũi tên **^** ở góc phải taskbar rồi k�
 | Nhìn icon | Số = % đã dùng của hạn mức 5h. Màu nền: xanh < 50%, cam 50–80%, đỏ ≥ 80% (tính theo hạn mức nào cao hơn trong 5h và tuần) |
 | Rê chuột | `Claude 5h: 28% \| còn 1h23m` / `Tuần: 25% \| còn 1d23h` |
 | Click trái | Cập nhật ngay và hiện giờ reset chính xác |
-| Click phải | Menu: chi tiết, Làm mới, Mở trang Usage trên claude.ai, Thoát |
+| Click phải | Menu: chi tiết, Làm mới, Mở trang Usage trên claude.ai, **Khởi động cùng Windows** (bật/tắt), Thoát |
 
 Số liệu tự cập nhật mỗi 3 phút. Khi vượt 80% sẽ có một thông báo cảnh báo (mỗi chu kỳ một lần).
 Muốn đổi các giá trị này: sửa `$RefreshMin` và `$WarnAt` ở đầu file `%LOCALAPPDATA%\ClaudeUsageTray\ClaudeUsageTray.ps1`.
