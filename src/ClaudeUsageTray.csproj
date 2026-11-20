@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Một file ClaudeUsageTray.exe duy nhất, chạy trên .NET Framework 4.8
+    (có sẵn trong Windows 10 1903+ và Windows 11, không cần cài thêm gì).
+    Build được cả trên Linux/macOS nhờ gói Microsoft.NETFramework.ReferenceAssemblies.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>ClaudeUsageTray</AssemblyName>
+    <RootNamespace>ClaudeUsageTray</RootNamespace>
+    <Version>2.0.0</Version>
+    <Product>Claude Usage Tray</Product>
+    <AssemblyTitle>Claude Usage Tray</AssemblyTitle>
+    <Description>Hiển thị hạn mức sử dụng Claude trên khay hệ thống Windows</Description>
+    <Copyright>MIT</Copyright>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <DebugType>none</DebugType>
+    <!-- Không sinh ClaudeUsageTray.exe.config để chỉ cần phát hành đúng 1 file exe -->
+    <GenerateBindingRedirectsOutputType>false</GenerateBindingRedirectsOutputType>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <SatelliteResourceLanguages>none</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Management" />
+  </ItemGroup>
+
+</Project>
